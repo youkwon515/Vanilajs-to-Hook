@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>useState</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        let currentStateKey = 0;
+        const states = [];
+        function useState (initState) {
+            console.log(states);
+            const key = currentStateKey;
+            if (states.length === key) {
+                states.push(initState);
+            }
+            const state = states[key];
+            const setState = (newState) => {
+                states[key] = newState;
+                render();
+            }
+            currentStateKey += 1;
+            return [state, setState];
+        }
+
+        function Counter () {
+            const [count, setCount] = useState(1);
+            window.increment = () => setCount(count + 1);
+
+            return `
+                <div>
+                    <strong>count: ${count} </strong>
+                    <button onclick="increment()">증가</button>   
+                </div>
+            `;
+        }
+
+        
+        function Cat () {
+            const [cat, setCat] = useState('고양이');
+
+            window.meow = () => setCat(cat + ' 야옹!');
+
+            return `
+                <div>
+                    <strong>${cat}</strong>
+                    <button onclick="meow()">고양이의 울음소리</button>
+                </div>
+            `;
+            
+        }
+
+        function render () {
+            const $app = document.querySelector("#app");
+            $app.innerHTML = `
+                <div>
+                    ${Counter()}    
+                    ${Cat()}
+                </div>
+            `;
+            currentStateKey = 0;
+        }
+
+        render();
+        
+    </script>
+</body>
+</html>
