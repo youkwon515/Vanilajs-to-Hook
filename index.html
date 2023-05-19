@@ -18,13 +18,17 @@
             }
             const state = states[key];
             const setState = (newState) => {
+                if (newState === state) return;
+
+                if (JSON.stringify(newState) === JSON.stringify(state)) return;
+
                 states[key] = newState;
                 render();
             }
             currentStateKey += 1;
             return [state, setState];
         }
-
+        
         function Counter () {
             const [count, setCount] = useState(1);
             window.increment = () => setCount(count + 1);
@@ -52,16 +56,50 @@
             
         }
 
-        function render () {
-            const $app = document.querySelector("#app");
-            $app.innerHTML = `
+        function CounterAndMeow () {
+            const [count, setCount] = useState(1);
+            const [cat, setCat] = useState('야옹! ');
+
+            function countMeow (newCount) {
+                setCount(newCount);
+                setCat('야옹! '.repeat(newCount));
+            }
+
+            window.increment = () => countMeow(count + 1);
+            window.decrement = () => countMeow(count - 1);
+
+            return `
                 <div>
-                    ${Counter()}    
-                    ${Cat()}
+                    <p>고양이가 ${count}번 울어서 ${cat} </p>
+                    <button onclick="increment()">증가</button>
+                    <button onclick="decrement()">감소</button>
                 </div>
             `;
-            currentStateKey = 0;
         }
+        
+
+        function debounceFrame (callback) {
+            let nextFrameCallback = -1;
+            return () => {
+                cancelAnimationFrame(nextFrameCallback);
+                nextFrameCallback = requestAnimationFrame(callback)
+            }
+        };
+
+
+        let renderCount = 0;
+
+        const render = debounceFrame(() => {
+            const $app = document.querySelector('#app');
+            $app.innerHTML = `
+                <div>
+                renderCount: ${renderCount}
+                ${CounterAndMeow()}
+                </div>
+            `;
+            renderCount += 1;
+            currentStateKey = 0;
+        });
 
         render();
         
