@@ -12,7 +12,6 @@
         let currentStateKey = 0;
         const states = [];
         function useState (initState) {
-            console.log(states);
             const key = currentStateKey;
             if (states.length === key) {
                 states.push(initState);
@@ -65,6 +64,7 @@
         }
 
         render();
+        
         
     </script>
 </body>
