@@ -1,3 +1,2 @@
-# vanilajs-to-hook
- 
-바닐라 자바스크립트로 리액트 비슷하게 만들어 보기
+# Vanilajs-to-Hook
+> Vanilla Javascript로 React UseState Hook 만들기
